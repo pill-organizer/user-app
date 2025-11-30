@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "914396340652",
+    "firebase_url": "https://smart-pill-organizer-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "smart-pill-organizer",
+    "storage_bucket": "smart-pill-organizer.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:914396340652:android:0cb640649d8ddac0ee5a09",
+        "android_client_info": {
+          "package_name": "com.aisroilov.smartpillorganizer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_57ZqeBf1P0HgpBO-CNXcEaateFm0Z8M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
