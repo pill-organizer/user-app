@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'app/app.dart';
+import 'app.dart';
 
 // Background message handler - must be a top-level function
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  // Handle background message here if needed
-  debugPrint('Background message received: ${message.messageId}');
+  debugPrint('Background message received: ${message.notification?.title}');
 }
 
 Future<void> main() async {
