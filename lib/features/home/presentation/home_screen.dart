@@ -10,17 +10,19 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeScreen> createState() => HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
-  final List<Widget> _tabs = const [
-    DashboardTab(),
-    SchedulesTab(),
-    NotificationsTab(),
-  ];
+  void updateIndex(int index) {
+    return setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  final List<Widget> _tabs = const [DashboardTab(), SchedulesTab(), NotificationsTab()];
 
   @override
   void initState() {
@@ -55,11 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
           : null,
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
-        onDestinationSelected: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
+        onDestinationSelected: (index) => updateIndex(index),
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.dashboard_outlined),

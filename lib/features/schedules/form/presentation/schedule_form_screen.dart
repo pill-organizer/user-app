@@ -379,26 +379,24 @@ class _ScheduleFormContentState extends State<_ScheduleFormContent> {
     );
   }
 
-  void _confirmDelete() {
-    showDialog(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: const Text('Delete Schedule'),
-        content: const Text(
-          'Are you sure you want to delete this schedule? This action cannot be undone.',
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(dialogContext), child: const Text('Cancel')),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(dialogContext);
-              context.read<ScheduleFormBloc>().add(ScheduleFormDeleteRequested(widget.scheduleId!));
-            },
-            style: ElevatedButton.styleFrom(backgroundColor: AppTheme.errorColor),
-            child: const Text('Delete'),
-          ),
-        ],
+  void _confirmDelete() => showDialog(
+    context: context,
+    builder: (dialogContext) => AlertDialog(
+      title: const Text('Delete Schedule'),
+      content: const Text(
+        'Are you sure you want to delete this schedule? This action cannot be undone.',
       ),
-    );
-  }
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(dialogContext), child: const Text('Cancel')),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pop(dialogContext);
+            context.read<ScheduleFormBloc>().add(ScheduleFormDeleteRequested(widget.scheduleId!));
+          },
+          style: ElevatedButton.styleFrom(backgroundColor: AppTheme.errorColor),
+          child: const Text('Delete'),
+        ),
+      ],
+    ),
+  );
 }
