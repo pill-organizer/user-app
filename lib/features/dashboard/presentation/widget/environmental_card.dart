@@ -34,9 +34,16 @@ class EnvironmentalCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Environment', style: Theme.of(context).textTheme.titleLarge),
+                  Text(
+                    'Environment',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                   if (onTap != null)
-                    Icon(Icons.arrow_forward_ios, size: 16, color: AppTheme.textSecondary),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      size: 16,
+                      color: AppTheme.textSecondary,
+                    ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -52,9 +59,9 @@ class EnvironmentalCard extends StatelessWidget {
                       const SizedBox(height: 8),
                       Text(
                         'No sensor data available',
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodyMedium?.copyWith(color: AppTheme.textSecondary),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppTheme.textSecondary,
+                        ),
                       ),
                     ],
                   ),
@@ -73,9 +80,10 @@ class EnvironmentalCard extends StatelessWidget {
                             label: 'Temperature',
                             value: '${data!.temperature.toStringAsFixed(1)}°C',
                             isAlert: isTemperatureAlert,
-                            range: '${config.tempMin.toInt()}-${config.tempMax.toInt()}°C',
+                            range:
+                                '${config.tempMin.toInt()}-${config.tempMax.toInt()}°C',
                           ),
-                        ), 
+                        ),
                         Expanded(
                           child: _buildMetricTile(
                             context,
@@ -83,12 +91,15 @@ class EnvironmentalCard extends StatelessWidget {
                             label: 'Humidity',
                             value: '${data!.humidity.toStringAsFixed(1)}%',
                             isAlert: isHumidityAlert,
-                            range: '${config.humidityMin.toInt()}-${config.humidityMax.toInt()}%',
+                            range:
+                                '${config.humidityMin.toInt()}-${config.humidityMax.toInt()}%',
                           ),
                         ),
                       ],
                     ),
-                    Text('Last updated: ${DateFormat.Hm().format(data!.dateTime)}'),
+                    Text(
+                      'Last updated: ${DateFormat.Hm().format(data!.dateTime)}',
+                    ),
                   ],
                 ),
             ],
@@ -113,7 +124,9 @@ class EnvironmentalCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: isAlert ? Border.all(color: AppTheme.errorColor.withValues(alpha: 0.5)) : null,
+        border: isAlert
+            ? Border.all(color: AppTheme.errorColor.withValues(alpha: 0.5))
+            : null,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,25 +138,33 @@ class EnvironmentalCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   label,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyMedium?.copyWith(color: AppTheme.textSecondary),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppTheme.textSecondary,
+                  ),
                 ),
               ),
-              if (isAlert) Icon(Icons.warning_amber_rounded, color: AppTheme.errorColor, size: 18),
+              if (isAlert)
+                Icon(
+                  Icons.warning_amber_rounded,
+                  color: AppTheme.errorColor,
+                  size: 18,
+                ),
             ],
           ),
           const SizedBox(height: 8),
           Text(
             value,
-            style: Theme.of(
-              context,
-            ).textTheme.headlineMedium?.copyWith(color: color, fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+              color: color,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 4),
           Text(
             'Range: $range',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppTheme.textSecondary),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: AppTheme.textSecondary),
           ),
         ],
       ),

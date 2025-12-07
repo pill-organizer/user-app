@@ -5,8 +5,6 @@ import '../../features/home/presentation/home_screen.dart';
 import '../../features/schedules/form/presentation/schedule_form_screen.dart';
 import '../../features/environmental/history/presentation/environmental_history_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
-import '../../features/settings/presentation/pin_settings_screen.dart';
-import '../../features/settings/presentation/threshold_settings_screen.dart';
 
 class AppRoutes {
   static const String splash = '/';
@@ -15,8 +13,6 @@ class AppRoutes {
   static const String scheduleForm = '/schedule-form';
   static const String environmentalHistory = '/environmental-history';
   static const String settings = '/settings';
-  static const String pinSettings = '/pin-settings';
-  static const String thresholdSettings = '/threshold-settings';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -28,19 +24,20 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const HomeScreen());
       case scheduleForm:
         final scheduleId = settings.arguments as String?;
-        return MaterialPageRoute(builder: (_) => ScheduleFormScreen(scheduleId: scheduleId));
+        return MaterialPageRoute(
+          builder: (_) => ScheduleFormScreen(scheduleId: scheduleId),
+        );
       case environmentalHistory:
-        return MaterialPageRoute(builder: (_) => const EnvironmentalHistoryScreen());
+        return MaterialPageRoute(
+          builder: (_) => const EnvironmentalHistoryScreen(),
+        );
       case AppRoutes.settings:
         return MaterialPageRoute(builder: (_) => const SettingsScreen());
-      case pinSettings:
-        return MaterialPageRoute(builder: (_) => const PinSettingsScreen());
-      case thresholdSettings:
-        return MaterialPageRoute(builder: (_) => const ThresholdSettingsScreen());
       default:
         return MaterialPageRoute(
-          builder: (_) =>
-              Scaffold(body: Center(child: Text('No route defined for ${settings.name}'))),
+          builder: (_) => Scaffold(
+            body: Center(child: Text('No route defined for ${settings.name}')),
+          ),
         );
     }
   }

@@ -18,8 +18,9 @@ class _NotificationsTabState extends State<NotificationsTab> {
   @override
   void initState() {
     super.initState();
-    _notificationsStream =
-        context.read<NotificationRepository>().notificationsStream;
+    _notificationsStream = context
+        .read<NotificationRepository>()
+        .notificationsStream;
   }
 
   @override
@@ -60,8 +61,9 @@ class _NotificationsTabState extends State<NotificationsTab> {
         return RefreshIndicator(
           onRefresh: () async {
             setState(() {
-              _notificationsStream =
-                  context.read<NotificationRepository>().notificationsStream;
+              _notificationsStream = context
+                  .read<NotificationRepository>()
+                  .notificationsStream;
             });
           },
           child: ListView.builder(
@@ -99,17 +101,17 @@ class _NotificationsTabState extends State<NotificationsTab> {
             const SizedBox(height: 24),
             Text(
               'No Notifications',
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
               'You\'ll receive notifications here when\nit\'s time to take your pills',
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppTheme.textSecondary,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: AppTheme.textSecondary),
             ),
           ],
         ),
@@ -117,7 +119,10 @@ class _NotificationsTabState extends State<NotificationsTab> {
     );
   }
 
-  Widget _buildNotificationCard(BuildContext context, AppNotification notification) {
+  Widget _buildNotificationCard(
+    BuildContext context,
+    AppNotification notification,
+  ) {
     IconData icon;
     Color color;
 
@@ -147,14 +152,13 @@ class _NotificationsTabState extends State<NotificationsTab> {
           color: AppTheme.errorColor,
           borderRadius: BorderRadius.circular(16),
         ),
-        child: const Icon(
-          Icons.delete_outline,
-          color: Colors.white,
-        ),
+        child: const Icon(Icons.delete_outline, color: Colors.white),
       ),
       onDismissed: (_) {
         if (notification.id != null) {
-          context.read<NotificationRepository>().deleteNotification(notification.id!);
+          context.read<NotificationRepository>().deleteNotification(
+            notification.id!,
+          );
         }
       },
       child: Card(
@@ -183,15 +187,13 @@ class _NotificationsTabState extends State<NotificationsTab> {
                       children: [
                         Text(
                           notification.typeDisplayName,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.w600,
-                              ),
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(fontWeight: FontWeight.w600),
                         ),
                         Text(
                           _formatTimestamp(notification.timestamp),
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: AppTheme.textSecondary,
-                              ),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(color: AppTheme.textSecondary),
                         ),
                       ],
                     ),
@@ -199,8 +201,8 @@ class _NotificationsTabState extends State<NotificationsTab> {
                     Text(
                       notification.message,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppTheme.textSecondary,
-                          ),
+                        color: AppTheme.textSecondary,
+                      ),
                     ),
                   ],
                 ),

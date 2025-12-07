@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/config/routes.dart';
 import '../../../../core/config/theme.dart';
-import '../../common/bloc/schedule_bloc.dart';
+import '../../common/bloc/schedule_list_bloc.dart';
 import '../../common/presentation/widget/schedule_card.dart';
 
 class SchedulesTab extends StatelessWidget {
@@ -10,17 +10,9 @@ class SchedulesTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ScheduleBloc, ScheduleState>(
+    return BlocConsumer<ScheduleListBloc, ScheduleListState>(
       listener: (context, state) {
-        if (state is ScheduleOperationSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-              backgroundColor: AppTheme.successColor,
-            ),
-          );
-          context.read<ScheduleBloc>().add(ScheduleLoadRequested());
-        } else if (state is ScheduleError) {
+        if (state is ScheduleListError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.message),
@@ -30,25 +22,25 @@ class SchedulesTab extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        if (state is ScheduleLoading) {
+        if (state is ScheduleListLoading) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (state is ScheduleLoaded) {
+        if (state is ScheduleListLoaded) {
           if (state.schedules.isEmpty) {
             return _buildEmptyState(context);
           }
 
           return RefreshIndicator(
             onRefresh: () async {
-              context.read<ScheduleBloc>().add(ScheduleLoadRequested());
+              context.read<ScheduleListBloc>().add(ScheduleListLoadRequested());
             },
             child: ListView.builder(
               padding: const EdgeInsets.all(16),
               itemCount: state.schedules.length,
               itemBuilder: (context, index) {
                 final schedule = state.schedules[index];
-                
+
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 12),
                   child: ScheduleListTile(
@@ -61,17 +53,17 @@ class SchedulesTab extends StatelessWidget {
                       );
                     },
                     onToggle: (enabled) {
-                      context.read<ScheduleBloc>().add(
-                            ScheduleToggleRequested(
-                              id: schedule.id!,
-                              enabled: enabled,
-                            ),
-                          );
+                      context.read<ScheduleListBloc>().add(
+                        ScheduleListToggleRequested(
+                          id: schedule.id!,
+                          enabled: enabled,
+                        ),
+                      );
                     },
                     onDelete: () {
-                      context.read<ScheduleBloc>().add(
-                            ScheduleDeleteRequested(schedule.id!),
-                          );
+                      context.read<ScheduleListBloc>().add(
+                        ScheduleListDeleteRequested(schedule.id!),
+                      );
                     },
                   ),
                 );
@@ -108,17 +100,17 @@ class SchedulesTab extends StatelessWidget {
             const SizedBox(height: 24),
             Text(
               'No Schedules Yet',
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
               'Add your first pill schedule to get\nreminders for your medications',
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppTheme.textSecondary,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: AppTheme.textSecondary),
             ),
             const SizedBox(height: 32),
             ElevatedButton.icon(
@@ -134,4 +126,3 @@ class SchedulesTab extends StatelessWidget {
     );
   }
 }
-

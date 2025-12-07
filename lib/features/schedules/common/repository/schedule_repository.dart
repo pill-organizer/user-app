@@ -7,7 +7,7 @@ class ScheduleRepository {
   late final DatabaseReference _schedulesRef;
 
   ScheduleRepository({FirebaseDatabase? database})
-      : _database = database ?? FirebaseDatabase.instance {
+    : _database = database ?? FirebaseDatabase.instance {
     _schedulesRef = _database.ref(FirebasePaths.schedules);
   }
 
@@ -23,8 +23,7 @@ class ScheduleRepository {
           entry.key.toString(),
           entry.value as Map<dynamic, dynamic>,
         );
-      }).toList()
-        ..sort((a, b) => a.time.compareTo(b.time));
+      }).toList()..sort((a, b) => a.time.compareTo(b.time));
     });
   }
 
@@ -40,8 +39,7 @@ class ScheduleRepository {
         entry.key.toString(),
         entry.value as Map<dynamic, dynamic>,
       );
-    }).toList()
-      ..sort((a, b) => a.time.compareTo(b.time));
+    }).toList()..sort((a, b) => a.time.compareTo(b.time));
   }
 
   /// Get a single schedule by ID
@@ -87,4 +85,3 @@ class ScheduleRepository {
     await _database.ref(FirebasePaths.deviceSyncRequest).set(true);
   }
 }
-

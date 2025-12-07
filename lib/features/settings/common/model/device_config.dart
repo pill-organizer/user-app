@@ -9,7 +9,7 @@ class DeviceConfig extends Equatable {
   final double humidityMax;
   final bool buzzerEnabled;
   final bool pushNotificationsEnabled;
-  final int? lastSync;
+  final DateTime? lastSync;
 
   const DeviceConfig({
     this.pinHash,
@@ -39,8 +39,11 @@ class DeviceConfig extends Equatable {
       humidityMin: (json['humidityMin'] as num?)?.toDouble() ?? 30.0,
       humidityMax: (json['humidityMax'] as num?)?.toDouble() ?? 60.0,
       buzzerEnabled: json['buzzerEnabled'] as bool? ?? true,
-      pushNotificationsEnabled: json['pushNotificationsEnabled'] as bool? ?? true,
-      lastSync: json['lastSync'] as int?,
+      pushNotificationsEnabled:
+          json['pushNotificationsEnabled'] as bool? ?? true,
+      lastSync: json['lastSync'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(json['lastSync'] as int)
+          : null,
     );
   }
 
@@ -54,7 +57,7 @@ class DeviceConfig extends Equatable {
       'humidityMax': humidityMax,
       'buzzerEnabled': buzzerEnabled,
       'pushNotificationsEnabled': pushNotificationsEnabled,
-      if (lastSync != null) 'lastSync': lastSync,
+      if (lastSync != null) 'lastSync': lastSync?.millisecondsSinceEpoch,
     };
   }
 
@@ -67,7 +70,7 @@ class DeviceConfig extends Equatable {
     double? humidityMax,
     bool? buzzerEnabled,
     bool? pushNotificationsEnabled,
-    int? lastSync,
+    DateTime? lastSync,
   }) {
     return DeviceConfig(
       pinHash: pinHash ?? this.pinHash,
@@ -77,22 +80,22 @@ class DeviceConfig extends Equatable {
       humidityMin: humidityMin ?? this.humidityMin,
       humidityMax: humidityMax ?? this.humidityMax,
       buzzerEnabled: buzzerEnabled ?? this.buzzerEnabled,
-      pushNotificationsEnabled: pushNotificationsEnabled ?? this.pushNotificationsEnabled,
+      pushNotificationsEnabled:
+          pushNotificationsEnabled ?? this.pushNotificationsEnabled,
       lastSync: lastSync ?? this.lastSync,
     );
   }
 
   @override
   List<Object?> get props => [
-        pinHash,
-        rfidTokens,
-        tempMin,
-        tempMax,
-        humidityMin,
-        humidityMax,
-        buzzerEnabled,
-        pushNotificationsEnabled,
-        lastSync,
-      ];
+    pinHash,
+    rfidTokens,
+    tempMin,
+    tempMax,
+    humidityMin,
+    humidityMax,
+    buzzerEnabled,
+    pushNotificationsEnabled,
+    lastSync,
+  ];
 }
-

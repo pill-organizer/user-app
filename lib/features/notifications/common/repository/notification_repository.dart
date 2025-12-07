@@ -17,9 +17,10 @@ class NotificationRepository {
     FirebaseDatabase? database,
     FirebaseMessaging? messaging,
     FlutterLocalNotificationsPlugin? localNotifications,
-  })  : _database = database ?? FirebaseDatabase.instance,
-        _messaging = messaging ?? FirebaseMessaging.instance,
-        _localNotifications = localNotifications ?? FlutterLocalNotificationsPlugin() {
+  }) : _database = database ?? FirebaseDatabase.instance,
+       _messaging = messaging ?? FirebaseMessaging.instance,
+       _localNotifications =
+           localNotifications ?? FlutterLocalNotificationsPlugin() {
     _notificationsRef = _database.ref(FirebasePaths.notifications);
   }
 
@@ -35,10 +36,9 @@ class NotificationRepository {
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized ||
         settings.authorizationStatus == AuthorizationStatus.provisional) {
-      
       // Subscribe to FCM topic
       await _messaging.subscribeToTopic(fcmTopic);
-      
+
       // Get and save FCM token (for potential direct messages)
       final token = await _messaging.getToken();
       if (token != null) {
@@ -60,13 +60,15 @@ class NotificationRepository {
   }
 
   Future<void> _initializeLocalNotifications() async {
-    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const androidSettings = AndroidInitializationSettings(
+      '@mipmap/ic_launcher',
+    );
     const iosSettings = DarwinInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
       requestSoundPermission: true,
     );
-    
+
     const initSettings = InitializationSettings(
       android: androidSettings,
       iOS: iosSettings,
@@ -88,7 +90,9 @@ class NotificationRepository {
     );
 
     await _localNotifications
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >()
         ?.createNotificationChannel(androidChannel);
   }
 
@@ -119,7 +123,8 @@ class NotificationRepository {
     const androidDetails = AndroidNotificationDetails(
       'smart_pill_organizer_channel',
       'Smart Pill Organizer',
-      channelDescription: 'Notifications for pill reminders and environmental alerts',
+      channelDescription:
+          'Notifications for pill reminders and environmental alerts',
       importance: Importance.high,
       priority: Priority.high,
       showWhen: true,
@@ -156,18 +161,17 @@ class NotificationRepository {
         .limitToLast(50)
         .onValue
         .map((event) {
-      if (event.snapshot.value == null) {
-        return <AppNotification>[];
-      }
-      final data = event.snapshot.value as Map<dynamic, dynamic>;
-      return data.entries.map((entry) {
-        return AppNotification.fromJson(
-          entry.key.toString(),
-          entry.value as Map<dynamic, dynamic>,
-        );
-      }).toList()
-        ..sort((a, b) => b.timestamp.compareTo(a.timestamp));
-    });
+          if (event.snapshot.value == null) {
+            return <AppNotification>[];
+          }
+          final data = event.snapshot.value as Map<dynamic, dynamic>;
+          return data.entries.map((entry) {
+            return AppNotification.fromJson(
+              entry.key.toString(),
+              entry.value as Map<dynamic, dynamic>,
+            );
+          }).toList()..sort((a, b) => b.timestamp.compareTo(a.timestamp));
+        });
   }
 
   /// Get recent notifications
@@ -176,7 +180,7 @@ class NotificationRepository {
         .orderByChild('timestamp')
         .limitToLast(limit)
         .get();
-    
+
     if (snapshot.value == null) {
       return [];
     }
@@ -187,8 +191,7 @@ class NotificationRepository {
         entry.key.toString(),
         entry.value as Map<dynamic, dynamic>,
       );
-    }).toList()
-      ..sort((a, b) => b.timestamp.compareTo(a.timestamp));
+    }).toList()..sort((a, b) => b.timestamp.compareTo(a.timestamp));
   }
 
   /// Mark notification as delivered

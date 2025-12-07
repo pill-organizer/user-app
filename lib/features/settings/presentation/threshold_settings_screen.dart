@@ -49,23 +49,18 @@ class _ThresholdSettingsScreenState extends State<ThresholdSettingsScreen> {
 
   void _saveSettings() {
     context.read<SettingsBloc>().add(
-          SettingsUpdateTemperatureThresholds(min: _tempMin, max: _tempMax),
-        );
+      SettingsUpdateTemperatureThresholds(min: _tempMin, max: _tempMax),
+    );
     context.read<SettingsBloc>().add(
-          SettingsUpdateHumidityThresholds(
-            min: _humidityMin,
-            max: _humidityMax,
-          ),
-        );
+      SettingsUpdateHumidityThresholds(min: _humidityMin, max: _humidityMax),
+    );
     Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Environment Thresholds'),
-      ),
+      appBar: AppBar(title: const Text('Environment Thresholds')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
@@ -89,10 +84,8 @@ class _ThresholdSettingsScreenState extends State<ThresholdSettingsScreen> {
                             child: Text(
                               'Set the safe temperature and humidity ranges for storing your medications. '
                               'You\'ll receive alerts when values go outside these ranges.',
-                              style:
-                                  Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                        color: AppTheme.primaryColor,
-                                      ),
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(color: AppTheme.primaryColor),
                             ),
                           ),
                         ],
@@ -114,7 +107,9 @@ class _ThresholdSettingsScreenState extends State<ThresholdSettingsScreen> {
                                 width: 40,
                                 height: 40,
                                 decoration: BoxDecoration(
-                                  color: AppTheme.accentColor.withValues(alpha: 0.1),
+                                  color: AppTheme.accentColor.withValues(
+                                    alpha: 0.1,
+                                  ),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: const Icon(
@@ -170,15 +165,13 @@ class _ThresholdSettingsScreenState extends State<ThresholdSettingsScreen> {
                             children: [
                               Text(
                                 '-20°C',
-                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: AppTheme.textSecondary,
-                                    ),
+                                style: Theme.of(context).textTheme.bodySmall
+                                    ?.copyWith(color: AppTheme.textSecondary),
                               ),
                               Text(
                                 '50°C',
-                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: AppTheme.textSecondary,
-                                    ),
+                                style: Theme.of(context).textTheme.bodySmall
+                                    ?.copyWith(color: AppTheme.textSecondary),
                               ),
                             ],
                           ),
@@ -201,7 +194,9 @@ class _ThresholdSettingsScreenState extends State<ThresholdSettingsScreen> {
                                 width: 40,
                                 height: 40,
                                 decoration: BoxDecoration(
-                                  color: AppTheme.secondaryColor.withValues(alpha: 0.1),
+                                  color: AppTheme.secondaryColor.withValues(
+                                    alpha: 0.1,
+                                  ),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: const Icon(
@@ -257,15 +252,13 @@ class _ThresholdSettingsScreenState extends State<ThresholdSettingsScreen> {
                             children: [
                               Text(
                                 '0%',
-                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: AppTheme.textSecondary,
-                                    ),
+                                style: Theme.of(context).textTheme.bodySmall
+                                    ?.copyWith(color: AppTheme.textSecondary),
                               ),
                               Text(
                                 '100%',
-                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: AppTheme.textSecondary,
-                                    ),
+                                style: Theme.of(context).textTheme.bodySmall
+                                    ?.copyWith(color: AppTheme.textSecondary),
                               ),
                             ],
                           ),
@@ -285,9 +278,8 @@ class _ThresholdSettingsScreenState extends State<ThresholdSettingsScreen> {
                         children: [
                           Text(
                             'Recommended Values',
-                            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                  color: AppTheme.textSecondary,
-                                ),
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(color: AppTheme.textSecondary),
                           ),
                           const SizedBox(height: 8),
                           Text(
@@ -295,9 +287,8 @@ class _ThresholdSettingsScreenState extends State<ThresholdSettingsScreen> {
                             '• Humidity: 30% - 60%\n\n'
                             'Most medications should be stored at room temperature, '
                             'away from excessive heat and moisture.',
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: AppTheme.textSecondary,
-                                ),
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(color: AppTheme.textSecondary),
                           ),
                         ],
                       ),
@@ -326,9 +317,9 @@ class _ThresholdSettingsScreenState extends State<ThresholdSettingsScreen> {
       children: [
         Text(
           label,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppTheme.textSecondary,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(color: AppTheme.textSecondary),
         ),
         const SizedBox(height: 4),
         Container(
@@ -340,13 +331,12 @@ class _ThresholdSettingsScreenState extends State<ThresholdSettingsScreen> {
           child: Text(
             value,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: color,
-                  fontWeight: FontWeight.bold,
-                ),
+              color: color,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ],
     );
   }
 }
-

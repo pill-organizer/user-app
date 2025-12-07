@@ -87,9 +87,7 @@ class AppTheme {
       ),
       cardTheme: CardThemeData(
         elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         color: surfaceColor,
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -166,9 +164,7 @@ class AppTheme {
         backgroundColor: accentColor,
         foregroundColor: Colors.white,
         elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith((states) {
@@ -184,10 +180,7 @@ class AppTheme {
           return Colors.grey.withValues(alpha: 0.3);
         }),
       ),
-      dividerTheme: const DividerThemeData(
-        color: dividerColor,
-        thickness: 1,
-      ),
+      dividerTheme: const DividerThemeData(color: dividerColor, thickness: 1),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: surfaceColor,
         selectedItemColor: primaryColor,
@@ -198,11 +191,8 @@ class AppTheme {
           fontSize: 12,
           fontWeight: FontWeight.w600,
         ),
-        unselectedLabelStyle: GoogleFonts.plusJakartaSans(
-          fontSize: 12,
-        ),
+        unselectedLabelStyle: GoogleFonts.plusJakartaSans(fontSize: 12),
       ),
     );
   }
 }
-

@@ -11,7 +11,8 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
@@ -19,7 +20,10 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1500));
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    );
 
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
@@ -67,7 +71,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [AppTheme.primaryColor, Color(0xFF2A4F7A), AppTheme.secondaryColor],
+              colors: [
+                AppTheme.primaryColor,
+                Color(0xFF2A4F7A),
+                AppTheme.secondaryColor,
+              ],
             ),
           ),
           child: SafeArea(
@@ -77,7 +85,10 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 builder: (context, child) {
                   return FadeTransition(
                     opacity: _fadeAnimation,
-                    child: ScaleTransition(scale: _scaleAnimation, child: child),
+                    child: ScaleTransition(
+                      scale: _scaleAnimation,
+                      child: child,
+                    ),
                   );
                 },
                 child: Column(
@@ -113,10 +124,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                     ),
                     Text(
                       'Organizer',
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        color: Colors.white.withValues(alpha: 0.9),
-                        fontWeight: FontWeight.w300,
-                      ),
+                      style: Theme.of(context).textTheme.headlineMedium
+                          ?.copyWith(
+                            color: Colors.white.withValues(alpha: 0.9),
+                            fontWeight: FontWeight.w300,
+                          ),
                     ),
                     const SizedBox(height: 48),
                     SizedBox(

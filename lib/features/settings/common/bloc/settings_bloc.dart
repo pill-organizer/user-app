@@ -45,7 +45,10 @@ class SettingsUpdateTemperatureThresholds extends SettingsEvent {
   final double min;
   final double max;
 
-  const SettingsUpdateTemperatureThresholds({required this.min, required this.max});
+  const SettingsUpdateTemperatureThresholds({
+    required this.min,
+    required this.max,
+  });
 
   @override
   List<Object> get props => [min, max];
@@ -55,7 +58,10 @@ class SettingsUpdateHumidityThresholds extends SettingsEvent {
   final double min;
   final double max;
 
-  const SettingsUpdateHumidityThresholds({required this.min, required this.max});
+  const SettingsUpdateHumidityThresholds({
+    required this.min,
+    required this.max,
+  });
 
   @override
   List<Object> get props => [min, max];
@@ -156,11 +162,16 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     return super.close();
   }
 
-  Future<void> _onLoadRequested(SettingsLoadRequested event, Emitter<SettingsState> emit) async {
+  Future<void> _onLoadRequested(
+    SettingsLoadRequested event,
+    Emitter<SettingsState> emit,
+  ) async {
     emit(SettingsLoading());
 
     _configSubscription?.cancel();
-    _configSubscription = _repository.configStream.listen((config) => add(_ConfigUpdated(config)));
+    _configSubscription = _repository.configStream.listen(
+      (config) => add(_ConfigUpdated(config)),
+    );
   }
 
   void _onConfigUpdated(_ConfigUpdated event, Emitter<SettingsState> emit) {
@@ -168,20 +179,34 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     emit(SettingsLoaded(event.config));
   }
 
-  Future<void> _onUpdatePin(SettingsUpdatePin event, Emitter<SettingsState> emit) async {
+  Future<void> _onUpdatePin(
+    SettingsUpdatePin event,
+    Emitter<SettingsState> emit,
+  ) async {
     try {
       await _repository.updatePin(event.newPin);
-      emit(SettingsOperationSuccess(message: 'PIN updated successfully', config: _currentConfig));
+      emit(
+        SettingsOperationSuccess(
+          message: 'PIN updated successfully',
+          config: _currentConfig,
+        ),
+      );
     } catch (e) {
       emit(SettingsError(e.toString(), config: _currentConfig));
     }
   }
 
-  Future<void> _onAddRfidToken(SettingsAddRfidToken event, Emitter<SettingsState> emit) async {
+  Future<void> _onAddRfidToken(
+    SettingsAddRfidToken event,
+    Emitter<SettingsState> emit,
+  ) async {
     try {
       await _repository.addRfidToken(event.token);
       emit(
-        SettingsOperationSuccess(message: 'RFID token added successfully', config: _currentConfig),
+        SettingsOperationSuccess(
+          message: 'RFID token added successfully',
+          config: _currentConfig,
+        ),
       );
     } catch (e) {
       emit(SettingsError(e.toString(), config: _currentConfig));
@@ -210,9 +235,15 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     Emitter<SettingsState> emit,
   ) async {
     try {
-      await _repository.updateTemperatureThresholds(min: event.min, max: event.max);
+      await _repository.updateTemperatureThresholds(
+        min: event.min,
+        max: event.max,
+      );
       emit(
-        SettingsOperationSuccess(message: 'Temperature thresholds updated', config: _currentConfig),
+        SettingsOperationSuccess(
+          message: 'Temperature thresholds updated',
+          config: _currentConfig,
+        ),
       );
     } catch (e) {
       emit(SettingsError(e.toString(), config: _currentConfig));
@@ -224,16 +255,25 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     Emitter<SettingsState> emit,
   ) async {
     try {
-      await _repository.updateHumidityThresholds(min: event.min, max: event.max);
+      await _repository.updateHumidityThresholds(
+        min: event.min,
+        max: event.max,
+      );
       emit(
-        SettingsOperationSuccess(message: 'Humidity thresholds updated', config: _currentConfig),
+        SettingsOperationSuccess(
+          message: 'Humidity thresholds updated',
+          config: _currentConfig,
+        ),
       );
     } catch (e) {
       emit(SettingsError(e.toString(), config: _currentConfig));
     }
   }
 
-  Future<void> _onToggleBuzzer(SettingsToggleBuzzer event, Emitter<SettingsState> emit) async {
+  Future<void> _onToggleBuzzer(
+    SettingsToggleBuzzer event,
+    Emitter<SettingsState> emit,
+  ) async {
     try {
       await _repository.setBuzzerEnabled(event.enabled);
     } catch (e) {

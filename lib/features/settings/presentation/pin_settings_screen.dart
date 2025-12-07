@@ -27,9 +27,7 @@ class _PinSettingsScreenState extends State<PinSettingsScreen> {
 
   void _savePin() {
     if (_formKey.currentState!.validate()) {
-      context.read<SettingsBloc>().add(
-            SettingsUpdatePin(_pinController.text),
-          );
+      context.read<SettingsBloc>().add(SettingsUpdatePin(_pinController.text));
       Navigator.pop(context);
     }
   }
@@ -37,9 +35,7 @@ class _PinSettingsScreenState extends State<PinSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('PIN Settings'),
-      ),
+      appBar: AppBar(title: const Text('PIN Settings')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -63,9 +59,8 @@ class _PinSettingsScreenState extends State<PinSettingsScreen> {
                         child: Text(
                           'The PIN is used to unlock the pill organizer using the keypad. '
                           'It will be stored securely as a SHA-256 hash.',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: AppTheme.primaryColor,
-                              ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(color: AppTheme.primaryColor),
                         ),
                       ),
                     ],
@@ -189,12 +184,8 @@ class _PinSettingsScreenState extends State<PinSettingsScreen> {
                               const SizedBox(height: 4),
                               Text(
                                 _getPinStrengthText(),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall
-                                    ?.copyWith(
-                                      color: _getPinStrengthColor(),
-                                    ),
+                                style: Theme.of(context).textTheme.bodySmall
+                                    ?.copyWith(color: _getPinStrengthColor()),
                               ),
                             ],
                           ),
@@ -241,4 +232,3 @@ class _PinSettingsScreenState extends State<PinSettingsScreen> {
     return 'Strong';
   }
 }
-

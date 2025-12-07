@@ -20,7 +20,11 @@ class EnvironmentalData extends Equatable {
   }
 
   Map<String, dynamic> toJson() {
-    return {'temperature': temperature, 'humidity': humidity, 'timestamp': timestamp};
+    return {
+      'temperature': temperature,
+      'humidity': humidity,
+      'timestamp': timestamp,
+    };
   }
 
   DateTime get dateTime => DateTime.fromMillisecondsSinceEpoch(timestamp);

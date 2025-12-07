@@ -71,7 +71,12 @@ class EnvironmentalLatestLoaded extends EnvironmentalState {
   });
 
   @override
-  List<Object?> get props => [latestData, config, isTemperatureAlert, isHumidityAlert];
+  List<Object?> get props => [
+    latestData,
+    config,
+    isTemperatureAlert,
+    isHumidityAlert,
+  ];
 }
 
 class EnvironmentalHistoryLoaded extends EnvironmentalState {
@@ -146,12 +151,18 @@ class EnvironmentalBloc extends Bloc<EnvironmentalEvent, EnvironmentalState> {
     );
   }
 
-  void _onLatestDataUpdated(_LatestDataUpdated event, Emitter<EnvironmentalState> emit) {
+  void _onLatestDataUpdated(
+    _LatestDataUpdated event,
+    Emitter<EnvironmentalState> emit,
+  ) {
     _latestData = event.data;
     _emitLatestState(emit);
   }
 
-  void _onConfigUpdated(_ConfigUpdated event, Emitter<EnvironmentalState> emit) {
+  void _onConfigUpdated(
+    _ConfigUpdated event,
+    Emitter<EnvironmentalState> emit,
+  ) {
     _config = event.config;
     _emitLatestState(emit);
   }
@@ -161,8 +172,12 @@ class EnvironmentalBloc extends Bloc<EnvironmentalEvent, EnvironmentalState> {
     bool humidityAlert = false;
 
     if (_latestData case final data?) {
-      tempAlert = data.temperature < _config.tempMin || data.temperature > _config.tempMax;
-      humidityAlert = data.humidity < _config.humidityMin || data.humidity > _config.humidityMax;
+      tempAlert =
+          data.temperature < _config.tempMin ||
+          data.temperature > _config.tempMax;
+      humidityAlert =
+          data.humidity < _config.humidityMin ||
+          data.humidity > _config.humidityMax;
     }
 
     emit(

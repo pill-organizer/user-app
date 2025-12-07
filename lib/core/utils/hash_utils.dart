@@ -16,4 +16,3 @@ class HashUtils {
     return inputHash == expectedHash;
   }
 }
-

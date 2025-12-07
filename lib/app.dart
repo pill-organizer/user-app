@@ -6,7 +6,7 @@ import 'features/auth/common/repository/auth_repository.dart';
 import 'features/auth/common/bloc/auth_bloc.dart';
 import 'features/settings/common/repository/device_repository.dart';
 import 'features/schedules/common/repository/schedule_repository.dart';
-import 'features/schedules/common/bloc/schedule_bloc.dart';
+import 'features/schedules/common/bloc/schedule_list_bloc.dart';
 import 'features/environmental/common/repository/environmental_repository.dart';
 import 'features/notifications/common/repository/notification_repository.dart';
 
@@ -43,8 +43,8 @@ class _SmartPillOrganizerAppState extends State<SmartPillOrganizerApp> {
           BlocProvider<AuthBloc>(
             create: (context) => AuthBloc(authRepository: context.read<AuthRepository>()),
           ),
-          BlocProvider<ScheduleBloc>(
-            create: (context) => ScheduleBloc(repository: context.read<ScheduleRepository>()),
+          BlocProvider<ScheduleListBloc>(
+            create: (context) => ScheduleListBloc(repository: context.read<ScheduleRepository>()),
           ),
         ],
         child: MaterialApp(

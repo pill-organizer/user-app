@@ -21,7 +21,9 @@ class EnvironmentalRepository {
 
   /// Stream of latest environmental data
   Stream<EnvironmentalData?> get latestDataStream {
-    return _hourlyRef.orderByChild('timestamp').limitToLast(1).onValue.map((event) {
+    return _hourlyRef.orderByChild('timestamp').limitToLast(1).onValue.map((
+      event,
+    ) {
       if (event.snapshot.value == null) {
         return null;
       }
@@ -33,7 +35,10 @@ class EnvironmentalRepository {
 
   /// Get the latest environmental data
   Future<EnvironmentalData?> getLatestData() async {
-    final snapshot = await _hourlyRef.orderByChild('timestamp').limitToLast(1).get();
+    final snapshot = await _hourlyRef
+        .orderByChild('timestamp')
+        .limitToLast(1)
+        .get();
     if (snapshot.value == null) {
       return null;
     }
@@ -65,8 +70,18 @@ class EnvironmentalRepository {
 
   /// Get hourly data for the last 24 hours
   Future<List<EnvironmentalData>> getLast24HoursData() async {
-    final endDay = DateTime.now().copyWith(hour: 23, minute: 59, second: 59, millisecond: 999);
-    final startDay = endDay.copyWith(hour: 0, minute: 0, second: 0, millisecond: 0);
+    final endDay = DateTime.now().copyWith(
+      hour: 23,
+      minute: 59,
+      second: 59,
+      millisecond: 999,
+    );
+    final startDay = endDay.copyWith(
+      hour: 0,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+    );
     return getHourlyData(startTimestamp: startDay, endTimestamp: endDay);
   }
 
@@ -75,7 +90,11 @@ class EnvironmentalRepository {
     required String startDate,
     required String endDate,
   }) async {
-    final snapshot = await _dailyRef.orderByKey().startAt(startDate).endAt(endDate).get();
+    final snapshot = await _dailyRef
+        .orderByKey()
+        .startAt(startDate)
+        .endAt(endDate)
+        .get();
 
     if (snapshot.value == null) {
       return [];
@@ -83,7 +102,9 @@ class EnvironmentalRepository {
 
     final data = snapshot.value as Map<dynamic, dynamic>;
     return data.entries.map((entry) {
-      return DailyEnvironmentalData.fromJson(entry.value as Map<dynamic, dynamic>);
+      return DailyEnvironmentalData.fromJson(
+        entry.value as Map<dynamic, dynamic>,
+      );
     }).toList()..sort((a, b) => a.date.compareTo(b.date));
   }
 

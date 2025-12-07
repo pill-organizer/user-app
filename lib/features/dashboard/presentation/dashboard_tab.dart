@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smart_pill_organizer_app/features/schedules/common/model/schedule.dart';
 import '../../../core/config/routes.dart';
 import '../../../core/config/theme.dart';
-import '../../schedules/common/bloc/schedule_bloc.dart';
+import '../../schedules/common/bloc/schedule_list_bloc.dart';
 import '../../environmental/common/bloc/environmental_bloc.dart';
 import 'widget/environmental_card.dart';
 import '../../schedules/common/presentation/widget/schedule_card.dart';
@@ -21,7 +22,7 @@ class DashboardTab extends StatelessWidget {
         builder: (context) {
           return RefreshIndicator(
             onRefresh: () async {
-              context.read<ScheduleBloc>().add(ScheduleLoadRequested());
+              context.read<ScheduleListBloc>().add(ScheduleListLoadRequested());
               context.read<EnvironmentalBloc>().add(EnvironmentalLoadLatest());
             },
             child: SingleChildScrollView(
@@ -136,9 +137,9 @@ class DashboardTab extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 12),
-        BlocBuilder<ScheduleBloc, ScheduleState>(
+        BlocBuilder<ScheduleListBloc, ScheduleListState>(
           builder: (context, state) {
-            if (state is ScheduleLoaded) {
+            if (state is ScheduleListLoaded) {
               if (state.todaySchedules.isEmpty) {
                 return Card(
                   child: Padding(
@@ -212,7 +213,7 @@ class DashboardTab extends StatelessWidget {
     );
   }
 
-  Widget _buildNextPillCard(BuildContext context, schedule) {
+  Widget _buildNextPillCard(BuildContext context, Schedule schedule) {
     return Card(
       color: AppTheme.primaryColor,
       child: Padding(
@@ -251,7 +252,7 @@ class DashboardTab extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        schedule.time,
+                        schedule.time.format(context),
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: Colors.white.withValues(alpha: 0.8),
                         ),
@@ -279,13 +280,13 @@ class DashboardTab extends StatelessWidget {
   }
 
   Widget _buildQuickStats(BuildContext context) {
-    return BlocBuilder<ScheduleBloc, ScheduleState>(
+    return BlocBuilder<ScheduleListBloc, ScheduleListState>(
       builder: (context, state) {
         int totalSchedules = 0;
         int activeSchedules = 0;
         int todayCount = 0;
 
-        if (state is ScheduleLoaded) {
+        if (state is ScheduleListLoaded) {
           totalSchedules = state.schedules.length;
           activeSchedules = state.schedules.where((s) => s.enabled).length;
           todayCount = state.todaySchedules.length;

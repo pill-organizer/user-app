@@ -30,7 +30,8 @@ class _EnvironmentalHistoryScreenContent extends StatefulWidget {
       _EnvironmentalHistoryScreenContentState();
 }
 
-class _EnvironmentalHistoryScreenContentState extends State<_EnvironmentalHistoryScreenContent>
+class _EnvironmentalHistoryScreenContentState
+    extends State<_EnvironmentalHistoryScreenContent>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   HistoryPeriod _selectedPeriod = HistoryPeriod.day;
@@ -39,7 +40,9 @@ class _EnvironmentalHistoryScreenContentState extends State<_EnvironmentalHistor
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    context.read<EnvironmentalBloc>().add(EnvironmentalLoadHistory(_selectedPeriod));
+    context.read<EnvironmentalBloc>().add(
+      EnvironmentalLoadHistory(_selectedPeriod),
+    );
   }
 
   @override
@@ -90,14 +93,17 @@ class _EnvironmentalHistoryScreenContentState extends State<_EnvironmentalHistor
                 if (state is EnvironmentalLoading) {
                   return const Center(child: CircularProgressIndicator());
                 }
-    
+
                 if (state is EnvironmentalHistoryLoaded) {
                   return TabBarView(
                     controller: _tabController,
-                    children: [_buildTemperatureChart(state), _buildHumidityChart(state)],
+                    children: [
+                      _buildTemperatureChart(state),
+                      _buildHumidityChart(state),
+                    ],
                   );
                 }
-    
+
                 if (state is EnvironmentalError) {
                   return Center(
                     child: Column(
@@ -123,7 +129,7 @@ class _EnvironmentalHistoryScreenContentState extends State<_EnvironmentalHistor
                     ),
                   );
                 }
-    
+
                 return const Center(child: Text('Select a period'));
               },
             ),
@@ -144,7 +150,9 @@ class _EnvironmentalHistoryScreenContentState extends State<_EnvironmentalHistor
           decoration: BoxDecoration(
             color: isSelected ? AppTheme.primaryColor : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: isSelected ? AppTheme.primaryColor : AppTheme.dividerColor),
+            border: Border.all(
+              color: isSelected ? AppTheme.primaryColor : AppTheme.dividerColor,
+            ),
           ),
           child: Center(
             child: Text(
@@ -237,8 +245,12 @@ class _EnvironmentalHistoryScreenContentState extends State<_EnvironmentalHistor
       }).toList();
 
       final avgValues = state.dailyData.map(getAvgDaily).toList();
-      final allMin = state.dailyData.map(getMinDaily).reduce((a, b) => a < b ? a : b);
-      final allMax = state.dailyData.map(getMaxDaily).reduce((a, b) => a > b ? a : b);
+      final allMin = state.dailyData
+          .map(getMinDaily)
+          .reduce((a, b) => a < b ? a : b);
+      final allMax = state.dailyData
+          .map(getMaxDaily)
+          .reduce((a, b) => a > b ? a : b);
       final avgValue = avgValues.reduce((a, b) => a + b) / avgValues.length;
 
       return _buildChartWithStats(
@@ -260,11 +272,17 @@ class _EnvironmentalHistoryScreenContentState extends State<_EnvironmentalHistor
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.show_chart, size: 64, color: AppTheme.textSecondary.withValues(alpha: 0.5)),
+          Icon(
+            Icons.show_chart,
+            size: 64,
+            color: AppTheme.textSecondary.withValues(alpha: 0.5),
+          ),
           const SizedBox(height: 16),
           Text(
             'No data available for this period',
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppTheme.textSecondary),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyLarge?.copyWith(color: AppTheme.textSecondary),
           ),
         ],
       ),
@@ -326,13 +344,17 @@ class _EnvironmentalHistoryScreenContentState extends State<_EnvironmentalHistor
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.info_outline, size: 18, color: AppTheme.textSecondary),
+                Icon(
+                  Icons.info_outline,
+                  size: 18,
+                  color: AppTheme.textSecondary,
+                ),
                 const SizedBox(width: 8),
                 Text(
                   'Safe range: ${minThreshold.toStringAsFixed(0)}$unit - ${maxThreshold.toStringAsFixed(0)}$unit',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyMedium?.copyWith(color: AppTheme.textSecondary),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppTheme.textSecondary,
+                  ),
                 ),
               ],
             ),
@@ -357,9 +379,8 @@ class _EnvironmentalHistoryScreenContentState extends State<_EnvironmentalHistor
                       getTitlesWidget: (value, meta) {
                         return Text(
                           '${value.toInt()}',
-                          style: Theme.of(
-                            context,
-                          ).textTheme.bodySmall?.copyWith(color: AppTheme.textSecondary),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(color: AppTheme.textSecondary),
                         );
                       },
                     ),
@@ -376,10 +397,11 @@ class _EnvironmentalHistoryScreenContentState extends State<_EnvironmentalHistor
                             padding: const EdgeInsets.only(top: 8),
                             child: Text(
                               xLabels[index],
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: AppTheme.textSecondary,
-                                fontSize: 10,
-                              ),
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(
+                                    color: AppTheme.textSecondary,
+                                    fontSize: 10,
+                                  ),
                             ),
                           );
                         }
@@ -387,8 +409,12 @@ class _EnvironmentalHistoryScreenContentState extends State<_EnvironmentalHistor
                       },
                     ),
                   ),
-                  rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  topTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
                 ),
                 borderData: FlBorderData(show: false),
                 lineBarsData: [
@@ -399,7 +425,10 @@ class _EnvironmentalHistoryScreenContentState extends State<_EnvironmentalHistor
                     barWidth: 3,
                     isStrokeCapRound: true,
                     dotData: const FlDotData(show: false),
-                    belowBarData: BarAreaData(show: true, color: color.withValues(alpha: 0.1)),
+                    belowBarData: BarAreaData(
+                      show: true,
+                      color: color.withValues(alpha: 0.1),
+                    ),
                   ),
                 ],
                 extraLinesData: ExtraLinesData(
@@ -424,7 +453,10 @@ class _EnvironmentalHistoryScreenContentState extends State<_EnvironmentalHistor
                       return spots.map((spot) {
                         return LineTooltipItem(
                           '${spot.y.toStringAsFixed(1)}$unit',
-                          const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                          const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         );
                       }).toList();
                     },
@@ -438,7 +470,12 @@ class _EnvironmentalHistoryScreenContentState extends State<_EnvironmentalHistor
     );
   }
 
-  Widget _buildStatCard(String label, String value, IconData icon, Color color) {
+  Widget _buildStatCard(
+    String label,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(12),
@@ -448,13 +485,16 @@ class _EnvironmentalHistoryScreenContentState extends State<_EnvironmentalHistor
             const SizedBox(height: 4),
             Text(
               value,
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: color),
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: color,
+              ),
             ),
             Text(
               label,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppTheme.textSecondary),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: AppTheme.textSecondary),
             ),
           ],
         ),

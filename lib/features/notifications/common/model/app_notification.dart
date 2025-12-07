@@ -1,10 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-enum NotificationType {
-  pillReminder,
-  environmentAlert,
-  system,
-}
+enum NotificationType { pillReminder, environmentAlert, system }
 
 class AppNotification extends Equatable {
   final String? id;

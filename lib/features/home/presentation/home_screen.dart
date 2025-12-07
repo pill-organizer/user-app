@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/config/routes.dart';
-import '../../schedules/common/bloc/schedule_bloc.dart';
+import '../../schedules/common/bloc/schedule_list_bloc.dart';
 import '../../dashboard/presentation/dashboard_tab.dart';
 import '../../schedules/list/presentation/schedules_tab.dart';
 import '../../notifications/list/presentation/notifications_tab.dart';
@@ -16,13 +16,17 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
-  final List<Widget> _tabs = const [DashboardTab(), SchedulesTab(), NotificationsTab()];
+  final List<Widget> _tabs = const [
+    DashboardTab(),
+    SchedulesTab(),
+    NotificationsTab(),
+  ];
 
   @override
   void initState() {
     super.initState();
     // Load data
-    context.read<ScheduleBloc>().add(ScheduleLoadRequested());
+    context.read<ScheduleListBloc>().add(ScheduleListLoadRequested());
   }
 
   @override

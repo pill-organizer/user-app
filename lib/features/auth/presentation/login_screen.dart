@@ -27,11 +27,11 @@ class _LoginScreenState extends State<LoginScreen> {
   void _onLogin() {
     if (_formKey.currentState!.validate()) {
       context.read<AuthBloc>().add(
-            AuthLoginRequested(
-              email: _emailController.text.trim(),
-              password: _passwordController.text,
-            ),
-          );
+        AuthLoginRequested(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+        ),
+      );
     }
   }
 
@@ -56,10 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [
-                AppTheme.primaryColor,
-                Color(0xFF2A4F7A),
-              ],
+              colors: [AppTheme.primaryColor, Color(0xFF2A4F7A)],
               stops: [0.0, 0.3],
             ),
           ),
@@ -92,16 +89,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 Text(
                   'Smart Pill Organizer',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'Sign in to manage your medications',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Colors.white.withValues(alpha: 0.8),
-                      ),
+                    color: Colors.white.withValues(alpha: 0.8),
+                  ),
                 ),
                 const SizedBox(height: 40),
                 // Form Card
@@ -172,8 +169,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             BlocBuilder<AuthBloc, AuthState>(
                               builder: (context, state) {
                                 return ElevatedButton(
-                                  onPressed:
-                                      state is AuthLoading ? null : _onLogin,
+                                  onPressed: state is AuthLoading
+                                      ? null
+                                      : _onLogin,
                                   child: state is AuthLoading
                                       ? const SizedBox(
                                           height: 24,
@@ -182,8 +180,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                             strokeWidth: 2,
                                             valueColor:
                                                 AlwaysStoppedAnimation<Color>(
-                                              Colors.white,
-                                            ),
+                                                  Colors.white,
+                                                ),
                                           ),
                                         )
                                       : const Text('Sign In'),

@@ -4,9 +4,11 @@ import '../../../../core/constants/firebase_paths.dart';
 import '../../../../core/utils/hash_utils.dart';
 
 class DeviceRepository {
-  DeviceRepository._({required DatabaseReference configRef, required DatabaseReference syncRef})
-    : _configRef = configRef,
-      _syncRef = syncRef;
+  DeviceRepository._({
+    required DatabaseReference configRef,
+    required DatabaseReference syncRef,
+  }) : _configRef = configRef,
+       _syncRef = syncRef;
 
   factory DeviceRepository({FirebaseDatabase? database}) {
     final db = database ?? FirebaseDatabase.instance;
@@ -25,7 +27,9 @@ class DeviceRepository {
       if (event.snapshot.value == null) {
         return const DeviceConfig();
       }
-      return DeviceConfig.fromJson(event.snapshot.value as Map<dynamic, dynamic>);
+      return DeviceConfig.fromJson(
+        event.snapshot.value as Map<dynamic, dynamic>,
+      );
     });
   }
 
@@ -68,14 +72,26 @@ class DeviceRepository {
   }
 
   /// Update temperature thresholds
-  Future<void> updateTemperatureThresholds({required double min, required double max}) async {
-    await _configRef.update({FirebasePaths.tempMin: min, FirebasePaths.tempMax: max});
+  Future<void> updateTemperatureThresholds({
+    required double min,
+    required double max,
+  }) async {
+    await _configRef.update({
+      FirebasePaths.tempMin: min,
+      FirebasePaths.tempMax: max,
+    });
     await _requestSync();
   }
 
   /// Update humidity thresholds
-  Future<void> updateHumidityThresholds({required double min, required double max}) async {
-    await _configRef.update({FirebasePaths.humidityMin: min, FirebasePaths.humidityMax: max});
+  Future<void> updateHumidityThresholds({
+    required double min,
+    required double max,
+  }) async {
+    await _configRef.update({
+      FirebasePaths.humidityMin: min,
+      FirebasePaths.humidityMax: max,
+    });
     await _requestSync();
   }
 
