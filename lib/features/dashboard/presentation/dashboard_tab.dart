@@ -7,7 +7,7 @@ import 'package:smart_pill_organizer_app/features/home/presentation/home_screen.
 import '../../../core/config/routes.dart';
 import '../../../core/config/theme.dart';
 import '../../schedules/common/bloc/schedule_list_bloc.dart';
-import '../../environmental/common/bloc/environmental_bloc.dart';
+import '../../environmental/common/bloc/environmental_dashboard_bloc.dart';
 import 'widget/environmental_card.dart';
 import '../../schedules/common/presentation/widget/schedule_card.dart';
 
@@ -17,16 +17,15 @@ class DashboardTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => EnvironmentalBloc(
+      create: (_) => EnvironmentalDashboardBloc(
         environmentalRepository: context.read(),
         deviceRepository: context.read(),
-      )..add(EnvironmentalLoadLatest()),
+      ),
       child: Builder(
         builder: (context) {
           return RefreshIndicator(
             onRefresh: () async {
               context.read<ScheduleListBloc>().add(ScheduleListLoadRequested());
-              context.read<EnvironmentalBloc>().add(EnvironmentalLoadLatest());
             },
             child: ListView(
               padding: const EdgeInsets.all(16),
@@ -37,24 +36,34 @@ class DashboardTab extends StatelessWidget {
                 const SizedBox(height: 24),
 
                 // Environmental Data
-                BlocBuilder<EnvironmentalBloc, EnvironmentalState>(
+                BlocBuilder<EnvironmentalDashboardBloc, EnvironmentalDashboardState>(
                   builder: (context, state) {
-                    if (state is EnvironmentalLatestLoaded) {
-                      return EnvironmentalCard(
-                        data: state.latestData,
-                        config: state.config,
-                        isTemperatureAlert: state.isTemperatureAlert,
-                        isHumidityAlert: state.isHumidityAlert,
-                        onTap: () {
-                          Navigator.pushNamed(context, AppRoutes.environmentalHistory);
-                        },
+                    if (state.isLoading) {
+                      return const Card(
+                        child: Padding(
+                          padding: EdgeInsets.all(32),
+                          child: Center(child: CircularProgressIndicator()),
+                        ),
                       );
                     }
-                    return const Card(
-                      child: Padding(
-                        padding: EdgeInsets.all(32),
-                        child: Center(child: CircularProgressIndicator()),
-                      ),
+                    if (state.hasError) {
+                      return Card(
+                        child: Padding(
+                          padding: EdgeInsets.all(32),
+                          child: Center(
+                            child: Text(state.errorMessage ?? 'Error loading environmental data'),
+                          ),
+                        ),
+                      );
+                    }
+                    return EnvironmentalCard(
+                      data: state.latestData,
+                      config: state.config,
+                      isTemperatureAlert: state.isTemperatureAlert,
+                      isHumidityAlert: state.isHumidityAlert,
+                      onTap: () {
+                        Navigator.pushNamed(context, AppRoutes.environmentalHistory);
+                      },
                     );
                   },
                 ),

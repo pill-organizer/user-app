@@ -11,6 +11,8 @@ class EnvironmentalData extends Equatable {
     required this.timestamp,
   });
 
+  const EnvironmentalData.empty() : this(temperature: 0.0, humidity: 0.0, timestamp: 0);
+
   factory EnvironmentalData.fromJson(Map<dynamic, dynamic> json) {
     return EnvironmentalData(
       temperature: (json['temperature'] as num).toDouble(),
