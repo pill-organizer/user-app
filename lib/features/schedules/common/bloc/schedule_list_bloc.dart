@@ -13,8 +13,6 @@ sealed class ScheduleListEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class ScheduleListLoadRequested extends ScheduleListEvent {}
-
 class ScheduleListToggleRequested extends ScheduleListEvent {
   final String id;
   final bool enabled;
@@ -43,6 +41,15 @@ class _ScheduleListUpdated extends ScheduleListEvent {
   List<Object> get props => [schedules];
 }
 
+class _ScheduleListError extends ScheduleListEvent {
+  final String message;
+
+  const _ScheduleListError(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
 // States
 sealed class ScheduleListState extends Equatable {
   const ScheduleListState();
@@ -53,21 +60,24 @@ sealed class ScheduleListState extends Equatable {
 
 class ScheduleListInitial extends ScheduleListState {}
 
-class ScheduleListLoading extends ScheduleListState {}
-
 class ScheduleListLoaded extends ScheduleListState {
   final List<Schedule> schedules;
   final List<Schedule> todaySchedules;
-  final Schedule? nextSchedule;
+  final List<Schedule> todayFutureSchedules;
+
+  Schedule? get nextSchedule => todayFutureSchedules.firstOrNull;
+  int get allTodaySchedulesCount => todaySchedules.length;
+  int get todayFutureSchedulesCount => todayFutureSchedules.length;
+  int get alreadyTakenSchedulesCount => allTodaySchedulesCount - todayFutureSchedulesCount;
 
   const ScheduleListLoaded({
     required this.schedules,
     required this.todaySchedules,
-    this.nextSchedule,
+    required this.todayFutureSchedules,
   });
 
   @override
-  List<Object?> get props => [schedules, todaySchedules, nextSchedule];
+  List<Object?> get props => [schedules, todaySchedules, todayFutureSchedules];
 }
 
 class ScheduleListError extends ScheduleListState {
@@ -81,29 +91,30 @@ class ScheduleListError extends ScheduleListState {
 
 // Bloc
 class ScheduleListBloc extends Bloc<ScheduleListEvent, ScheduleListState> {
-  final ScheduleRepository _repository;
-  StreamSubscription<List<Schedule>>? _schedulesSubscription;
-
   ScheduleListBloc({required ScheduleRepository repository})
     : _repository = repository,
       super(ScheduleListInitial()) {
-    on<ScheduleListLoadRequested>(_onLoadRequested);
+    _schedulesSubscription = _repository.schedulesStream.listen(
+      (schedules) => add(_ScheduleListUpdated(schedules)),
+      onError: (error) => add(_ScheduleListError(error.toString())),
+    );
     on<ScheduleListToggleRequested>(_onToggleRequested);
     on<ScheduleListDeleteRequested>(_onDeleteRequested);
     on<_ScheduleListUpdated>(_onSchedulesUpdated);
+    on<_ScheduleListError>(_onScheduleListError);
   }
 
-  Future<void> _onLoadRequested(
-    ScheduleListLoadRequested event,
-    Emitter<ScheduleListState> emit,
-  ) async {
-    emit(ScheduleListLoading());
+  final ScheduleRepository _repository;
+  late final StreamSubscription<List<Schedule>> _schedulesSubscription;
 
-    _schedulesSubscription?.cancel();
-    _schedulesSubscription = _repository.schedulesStream.listen(
-      (schedules) => add(_ScheduleListUpdated(schedules)),
-      onError: (error) => emit(ScheduleListError(error.toString())),
-    );
+  @override
+  Future<void> close() {
+    _schedulesSubscription.cancel();
+    return super.close();
+  }
+
+  void _onScheduleListError(_ScheduleListError event, Emitter<ScheduleListState> emit) {
+    emit(ScheduleListError(event.message));
   }
 
   void _onSchedulesUpdated(_ScheduleListUpdated event, Emitter<ScheduleListState> emit) {
@@ -111,29 +122,21 @@ class ScheduleListBloc extends Bloc<ScheduleListEvent, ScheduleListState> {
     final currentWeekday = WeekDay.fromInt(now.weekday);
     final currentTime = TimeOfDay.now();
 
-    // Filter today's schedules
-    final todaySchedules = event.schedules.where((s) {
-      if (!s.enabled) return false;
-      return s.days.contains(currentWeekday);
-    }).toList();
+    // Filter today's schedules (all schedules for today)
+    final todaySchedules =
+        event.schedules.where((s) => s.enabled && s.days.contains(currentWeekday)).toList()
+          ..sort((a, b) => a.time.compareTo(b.time));
 
-    // Sort by time
-    todaySchedules.sort((a, b) => a.time.compareTo(b.time));
-
-    // Find next schedule
-    Schedule? nextSchedule;
-    for (final schedule in todaySchedules) {
-      if (schedule.time.compareTo(currentTime) > 0) {
-        nextSchedule = schedule;
-        break;
-      }
-    }
+    // Filter future schedules (only those after current time)
+    final todayFutureSchedules = todaySchedules
+        .where((s) => s.time.compareTo(currentTime) > 0)
+        .toList();
 
     emit(
       ScheduleListLoaded(
         schedules: event.schedules,
         todaySchedules: todaySchedules,
-        nextSchedule: nextSchedule,
+        todayFutureSchedules: todayFutureSchedules,
       ),
     );
   }
@@ -158,11 +161,5 @@ class ScheduleListBloc extends Bloc<ScheduleListEvent, ScheduleListState> {
     } catch (e) {
       emit(ScheduleListError(e.toString()));
     }
-  }
-
-  @override
-  Future<void> close() {
-    _schedulesSubscription?.cancel();
-    return super.close();
   }
 }

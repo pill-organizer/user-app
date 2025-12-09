@@ -122,7 +122,7 @@ class _HourlyChartsView extends StatelessWidget {
         }
 
         if (state.hasError) {
-          return ChartErrorWidget(
+          return CommonErrorWidget(
             message: state.errorMessage!,
             onRetry: () => context.read<EnvironmentalHourlyBloc>().add(
               EnvironmentalHourlyLoadDateRange(startDate: state.startDate, endDate: state.endDate),
@@ -276,7 +276,7 @@ class _DailyChartsView extends StatelessWidget {
         }
 
         if (state.hasError) {
-          return ChartErrorWidget(
+          return CommonErrorWidget(
             message: state.errorMessage!,
             onRetry: () => context.read<EnvironmentalDailyBloc>().add(
               EnvironmentalDailyLoadDateRange(startDate: state.startDate, endDate: state.endDate),

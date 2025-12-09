@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/config/theme.dart';
 
-class ChartErrorWidget extends StatelessWidget {
-  const ChartErrorWidget({
+class CommonErrorWidget extends StatelessWidget {
+  const CommonErrorWidget({
     super.key,
     required this.message,
     required this.onRetry,

@@ -23,60 +23,56 @@ class DashboardTab extends StatelessWidget {
       ),
       child: Builder(
         builder: (context) {
-          return RefreshIndicator(
-            onRefresh: () async {
-              context.read<ScheduleListBloc>().add(ScheduleListLoadRequested());
-            },
-            child: ListView(
-              padding: const EdgeInsets.all(16),
-              shrinkWrap: true,
-              children: [
-                // Greeting
-                GreetingHeader(context: context),
-                const SizedBox(height: 24),
+          return ListView(
+            padding: const EdgeInsets.all(16),
+            shrinkWrap: true,
+            physics: const BouncingScrollPhysics(),
+            children: [
+              // Greeting
+              GreetingHeader(context: context),
+              const SizedBox(height: 24),
 
-                // Environmental Data
-                BlocBuilder<EnvironmentalDashboardBloc, EnvironmentalDashboardState>(
-                  builder: (context, state) {
-                    if (state.isLoading) {
-                      return const Card(
-                        child: Padding(
-                          padding: EdgeInsets.all(32),
-                          child: Center(child: CircularProgressIndicator()),
-                        ),
-                      );
-                    }
-                    if (state.hasError) {
-                      return Card(
-                        child: Padding(
-                          padding: EdgeInsets.all(32),
-                          child: Center(
-                            child: Text(state.errorMessage ?? 'Error loading environmental data'),
-                          ),
-                        ),
-                      );
-                    }
-                    return EnvironmentalCard(
-                      data: state.latestData,
-                      config: state.config,
-                      isTemperatureAlert: state.isTemperatureAlert,
-                      isHumidityAlert: state.isHumidityAlert,
-                      onTap: () {
-                        Navigator.pushNamed(context, AppRoutes.environmentalHistory);
-                      },
+              // Environmental Data
+              BlocBuilder<EnvironmentalDashboardBloc, EnvironmentalDashboardState>(
+                builder: (context, state) {
+                  if (state.isLoading) {
+                    return const Card(
+                      child: Padding(
+                        padding: EdgeInsets.all(32),
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
                     );
-                  },
-                ),
-                const SizedBox(height: 24),
+                  }
+                  if (state.hasError) {
+                    return Card(
+                      child: Padding(
+                        padding: EdgeInsets.all(32),
+                        child: Center(
+                          child: Text(state.errorMessage ?? 'Error loading environmental data'),
+                        ),
+                      ),
+                    );
+                  }
+                  return EnvironmentalCard(
+                    data: state.latestData,
+                    config: state.config,
+                    isTemperatureAlert: state.isTemperatureAlert,
+                    isHumidityAlert: state.isHumidityAlert,
+                    onTap: () {
+                      Navigator.pushNamed(context, AppRoutes.environmentalHistory);
+                    },
+                  );
+                },
+              ),
+              const SizedBox(height: 24),
 
-                // Today's Schedules
-                _buildTodaySchedules(context),
-                const SizedBox(height: 24),
+              // Today's Schedules
+              _buildTodaySchedules(context),
+              const SizedBox(height: 24),
 
-                // Quick Stats
-                QuickStats(context: context),
-              ],
-            ),
+              // Quick Stats
+              const QuickStats(),
+            ],
           );
         },
       ),
@@ -103,7 +99,7 @@ class DashboardTab extends StatelessWidget {
         BlocBuilder<ScheduleListBloc, ScheduleListState>(
           builder: (context, state) {
             if (state is ScheduleListLoaded) {
-              if (state.todaySchedules.isEmpty) {
+              if (state.todayFutureSchedules.isEmpty) {
                 return Card(
                   child: Padding(
                     padding: const EdgeInsets.all(32),
@@ -117,7 +113,7 @@ class DashboardTab extends StatelessWidget {
                           ),
                           const SizedBox(height: 12),
                           Text(
-                            'No pills scheduled for today',
+                            'No upcoming pills for today',
                             style: Theme.of(
                               context,
                             ).textTheme.bodyMedium?.copyWith(color: AppTheme.textSecondary),
@@ -143,7 +139,7 @@ class DashboardTab extends StatelessWidget {
                     NextPillCard(schedule),
                     const SizedBox(height: 12),
                   ],
-                  ...state.todaySchedules
+                  ...state.todayFutureSchedules
                       .where((s) => s.id != state.nextSchedule?.id)
                       .take(3)
                       .map(

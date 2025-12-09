@@ -14,61 +14,39 @@ class SchedulesTab extends StatelessWidget {
       listener: (context, state) {
         if (state is ScheduleListError) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-              backgroundColor: AppTheme.errorColor,
-            ),
+            SnackBar(content: Text(state.message), backgroundColor: AppTheme.errorColor),
           );
         }
       },
       builder: (context, state) {
-        if (state is ScheduleListLoading) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
         if (state is ScheduleListLoaded) {
           if (state.schedules.isEmpty) {
             return _buildEmptyState(context);
           }
 
-          return RefreshIndicator(
-            onRefresh: () async {
-              context.read<ScheduleListBloc>().add(ScheduleListLoadRequested());
-            },
-            child: ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: state.schedules.length,
-              itemBuilder: (context, index) {
-                final schedule = state.schedules[index];
+          return ListView.separated(
+            padding: const EdgeInsets.all(16),
+            physics: const BouncingScrollPhysics(),
+            itemCount: state.schedules.length,
+            separatorBuilder: (context, index) => const SizedBox(height: 12),
+            itemBuilder: (context, index) {
+              final schedule = state.schedules[index];
 
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: ScheduleListTile(
-                    schedule: schedule,
-                    onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        AppRoutes.scheduleForm,
-                        arguments: schedule.id,
-                      );
-                    },
-                    onToggle: (enabled) {
-                      context.read<ScheduleListBloc>().add(
-                        ScheduleListToggleRequested(
-                          id: schedule.id!,
-                          enabled: enabled,
-                        ),
-                      );
-                    },
-                    onDelete: () {
-                      context.read<ScheduleListBloc>().add(
-                        ScheduleListDeleteRequested(schedule.id!),
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
+              return ScheduleListTile(
+                schedule: schedule,
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.scheduleForm, arguments: schedule.id);
+                },
+                onToggle: (enabled) {
+                  context.read<ScheduleListBloc>().add(
+                    ScheduleListToggleRequested(id: schedule.id!, enabled: enabled),
+                  );
+                },
+                onDelete: () {
+                  context.read<ScheduleListBloc>().add(ScheduleListDeleteRequested(schedule.id!));
+                },
+              );
+            },
           );
         }
 

@@ -88,8 +88,6 @@ class ScheduleFormError extends ScheduleFormState {
 
 // Bloc
 class ScheduleFormBloc extends Bloc<ScheduleFormEvent, ScheduleFormState> {
-  final ScheduleRepository _repository;
-
   ScheduleFormBloc({required ScheduleRepository repository})
     : _repository = repository,
       super(ScheduleFormInitial()) {
@@ -98,6 +96,8 @@ class ScheduleFormBloc extends Bloc<ScheduleFormEvent, ScheduleFormState> {
     on<ScheduleFormUpdateRequested>(_onUpdateRequested);
     on<ScheduleFormDeleteRequested>(_onDeleteRequested);
   }
+
+  final ScheduleRepository _repository;
 
   Future<void> _onLoadRequested(
     ScheduleFormLoadRequested event,
