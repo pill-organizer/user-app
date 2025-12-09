@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smart_pill_organizer_app/features/schedules/common/bloc/schedule_list_bloc.dart';
 import 'core/config/routes.dart';
 import 'core/config/theme.dart';
 import 'features/auth/common/repository/auth_repository.dart';
 import 'features/auth/common/bloc/auth_bloc.dart';
 import 'features/settings/common/repository/device_repository.dart';
 import 'features/schedules/common/repository/schedule_repository.dart';
-import 'features/schedules/common/bloc/schedule_list_bloc.dart';
 import 'features/environmental/common/repository/environmental_repository.dart';
 import 'features/notifications/common/repository/notification_repository.dart';
 
@@ -19,6 +19,7 @@ class SmartPillOrganizerApp extends StatefulWidget {
 
 class _SmartPillOrganizerAppState extends State<SmartPillOrganizerApp> {
   late final NotificationRepository _notificationRepository;
+  final _navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   void initState() {
@@ -47,20 +48,25 @@ class _SmartPillOrganizerAppState extends State<SmartPillOrganizerApp> {
             create: (context) => ScheduleListBloc(repository: context.read<ScheduleRepository>()),
           ),
         ],
-        child: MaterialApp(
-          title: 'Smart Pill Organizer',
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme.lightTheme,
-          onGenerateRoute: AppRoutes.generateRoute,
-          initialRoute: AppRoutes.splash,
-          builder: (context, child) {
+        child: Builder(
+          builder: (context) {
             return BlocListener<AuthBloc, AuthState>(
               listener: (context, state) {
                 if (state is AuthUnauthenticated) {
-                  Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.login, (route) => false);
+                  _navigatorKey.currentState?.pushNamedAndRemoveUntil(
+                    AppRoutes.login,
+                    (route) => false,
+                  );
                 }
               },
-              child: child ?? const SizedBox.shrink(),
+              child: MaterialApp(
+                navigatorKey: _navigatorKey,
+                title: 'Smart Pill Organizer',
+                debugShowCheckedModeBanner: false,
+                theme: AppTheme.lightTheme,
+                onGenerateRoute: AppRoutes.generateRoute,
+                initialRoute: AppRoutes.splash,
+              ),
             );
           },
         ),

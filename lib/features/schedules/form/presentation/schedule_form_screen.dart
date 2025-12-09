@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_pill_organizer_app/features/environmental/history/presentation/widget/chart_state_widgets.dart';
 import '../../../../core/config/theme.dart';
 import '../../common/model/schedule.dart';
 import '../../common/repository/schedule_repository.dart';
@@ -149,42 +148,30 @@ class _ScheduleFormContentState extends State<_ScheduleFormContent> {
                 ),
             ],
           ),
-          body: Builder(
-            builder: (context) {
-              switch (state) {
-                case ScheduleFormInitial():
-                case ScheduleFormLoading():
-                case ScheduleFormSuccess():
-                  return const Center(child: CircularProgressIndicator());
-                case ScheduleFormLoaded():
-                  break;
-                case ScheduleFormError():
-                  return CommonErrorWidget(message: state.message, onRetry: () => _saveSchedule());
-              }
-              return isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : Form(
-                      key: _formKey,
-                      child: ListView(
-                        padding: const EdgeInsets.all(16),
-                        children: [
-                          _PillNameCard(initialPillName: notifier.pillName),
-                          const SizedBox(height: 16),
-                          _TimeCard(onTap: _selectTime),
-                          const SizedBox(height: 16),
-                          const _DaysCard(),
-                          const SizedBox(height: 16),
-                          const _EnabledCard(),
-                          const SizedBox(height: 32),
-                          ElevatedButton(
-                            onPressed: _saveSchedule,
-                            child: Text(notifier.isEditing ? 'Update Schedule' : 'Create Schedule'),
-                          ),
-                        ],
+          body: isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : Form(
+                  key: _formKey,
+                  child: ListView(
+                    padding: const EdgeInsets.all(16),
+                    children: [
+                      _PillNameCard(
+                        initialPillName: state is ScheduleFormLoaded ? state.schedule.pillName : '',
                       ),
-                    );
-            },
-          ),
+                      const SizedBox(height: 16),
+                      _TimeCard(onTap: _selectTime),
+                      const SizedBox(height: 16),
+                      const _DaysCard(),
+                      const SizedBox(height: 16),
+                      const _EnabledCard(),
+                      const SizedBox(height: 32),
+                      ElevatedButton(
+                        onPressed: _saveSchedule,
+                        child: Text(notifier.isEditing ? 'Update Schedule' : 'Create Schedule'),
+                      ),
+                    ],
+                  ),
+                ),
         );
       },
     );
